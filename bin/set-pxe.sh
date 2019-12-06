@@ -62,13 +62,14 @@ EOF
 	;;
 
 xenserver-auto)
+  answerfile="${HTTPHOST_BASEURL}/${installer_name}-answerfile"
 	cat <<EOF > "$filename"
 default $action
 label $action
 	kernel mboot.c32
-	append ${xen_pxe_dir}/xen.gz dom0_max_vcpus=1-16 dom0_mem=max:8192M com1=115200,8n1 console=com1,vga --- ${xen_pxe_dir}/vmlinuz xencons=hvc console=hvc0 console=tty0 answerfile=${HTTPHOST_BASEURL}/${installer_name}-answerfile install --- ${xen_pxe_dir}/install.img
+	append ${xen_pxe_dir}/xen.gz dom0_max_vcpus=1-16 dom0_mem=max:8192M com1=115200,8n1 console=com1,vga --- ${xen_pxe_dir}/vmlinuz xencons=hvc console=hvc0 console=tty0 answerfile=${answerfile} install --- ${xen_pxe_dir}/install.img
 EOF
-	echo "PXE action set to $action for ip ${host_ip}"
+	echo "PXE action set to $action for ip ${host_ip} (xen answerfile: ${answerfile})"
 	;;
 
 *)
