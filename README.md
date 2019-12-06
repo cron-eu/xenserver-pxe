@@ -103,3 +103,40 @@ Done!
 
 `set-pxe.sh` is a shell script to configure a PXE configuration file for a specific IP address.
 
+#### Examples
+
+Install XenServer on a server named `clms306.ffm`:
+
+```bash
+# set-pxe.sh clms306.ffm xenserver-auto
+Using XenServer Version: 8.0.0
+Using PXE configuration file: /srv/tftp/pxelinux.cfg/C0A8061C
+PXE action set to xenserver-auto for ip clms306.ffm
+```
+
+This will generate the PXE file `/srv/tftp/pxelinux.cfg/C0A8061C` (clms306.ffm having the internal IP 192.168.6.28):
+
+After reboot, the server will run the XenServer Installer and install the Xen Hypervisor in the configured version.
+
+Monitor the logs using:
+
+```bash
+tail -f /var/log/syslog /var/log/lighttpd/access.log
+```
+
+While the installer is running (after the server fetches the answerfile):
+
+```
+192.168.6.28 service.ffm - [05/Dec/2019:20:36:43 +0100] "GET /xeninstall-answerfile80 HTTP/1.1" 200 330 "-" "curl/7.15.5 (i686-redhat-linux-gnu) libcurl/7.15.5 OpenSSL/0.9.8b zlib/1.2.3 libidn/0.6.5"
+```
+
+Revert the PXE setup so the server will be able to boot from the local drive:
+
+```bash
+# set-pxe.sh clms306.ffm off
+Using XenServer Version: 8.0.0
+Using PXE configuration file: /srv/tftp/pxelinux.cfg/C0A8061C
+PXE configuration removed for ip clms306.ffm
+```
+
+This will basically remove the PXE configuration file for the specific ip.
