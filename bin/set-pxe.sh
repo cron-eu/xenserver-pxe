@@ -7,9 +7,6 @@
 # apt-get install syslinux-utils
 #
 
-##
-# Configuration
-
 # shellcheck source=../.env
 . "$(dirname "$0")/../.env"
 
@@ -35,13 +32,11 @@ xen_pxe_dir="xen-installer-${CITRIX_VERSION}"
 host="$1"; shift
 action="$1"; shift
 
-cd "$TFTP_ROOT" || error "could not chdir to $TFTP_ROOT"
-
 if [ -z "$action" ]; then
 	usage
 fi
 
-filename="${TFTP_ROOT}/pxelinux.cfg/$(gethostip -x "$host")"
+filename="/srv/tftp/pxelinux.cfg/$(gethostip -x "$host")"
 host_ip=$(gethostip -n "$host")
 
 if [ -z "$filename" ]; then
