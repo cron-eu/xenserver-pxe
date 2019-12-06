@@ -3,7 +3,8 @@
 Abstract
 ----
 
-Unattended Setup of XenServer Hypervisor on bare metal.
+Unattended Setup of XenServer Hypervisor on bare metal. This document describes how to setup the requied pxe environment
+(tftp, dhcp and http server) for Debian flavored systems.
 
 ### Clone this repo
 
@@ -30,7 +31,7 @@ echo net.ipv4.ip_forward=1 >> /etc/sysctl.conf
 cp configuration-sample/dhcp/dhcpd.conf /etc/dhcp/
 vi /etc/dhcp/dhcpd.conf # change configuration as needed
 
-# make sure the DHCP Server is listening on the right if
+# make sure the DHCP Server is listening on the right interface
 cat <<EOF >> /etc/default/isc-dhcp-server
 INTERFACESv4="eth1"
 INTERFACESv6=""
@@ -71,8 +72,8 @@ URL="${HTTPHOST_BASEURL}/{CITRIX_INSTALLER_NAME}"
 file=/var/www/html/${CITRIX_INSTALLER_NAME}-answerfile
 cp configuration-sample/xen-setup/answerfile.xml $file 
 
-sed -f "s/ROOT_PASSWORD/$(openssl rand -base64 32)/" $file 
-sed -f "s/SOURCE_URL/$URL" $file
+sed -i "s/ROOT_PASSWORD/$(openssl rand -base64 32)/" $file 
+sed -i "s/SOURCE_URL/$URL" $file
 
 # Copy the PXE related files from the Installer bundle:
 
