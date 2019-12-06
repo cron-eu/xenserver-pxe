@@ -67,18 +67,24 @@ Create the answerfile for unattended setup:
 ```bash
 CITRIX_INSTALLER_NAME="CitrixHypervisor-${CITRIX_VERSION}-install"
 URL="${HTTPHOST_BASEURL}/{CITRIX_INSTALLER_NAME}"
+
 file=/var/www/html/${CITRIX_INSTALLER_NAME}-answerfile
 cp configuration-sample/xen-setup/answerfile.xml $file 
 
 sed -f "s/ROOT_PASSWORD/$(openssl rand -base64 32)/" $file 
-sed -f "s/SOURCE_URL/$URL" $file 
-```
+sed -f "s/SOURCE_URL/$URL" $file
 
-Copy the PXE related files from the Installer bundle:
+# Copy the PXE related files from the Installer bundle:
 
-```bash
 mkdir -p /srv/tftp/pxelinux.cfg
 cp /var/www/html/${CITRIX_INSTALLER_NAME}/boot/pxelinux/* /srv/tftp/ 
+
+# Copy the Xen Installer from bundle:
+
+xen_installer_dir=/srv/tftp/xen-installer-${CITRIX_VERSION}
+mkdir -p ${xen_installer_dir}
+cp -a /var/www/html/${CITRIX_INSTALLER_NAME}/boot/* ${xen_installer_dir}
+cp /var/www/html/${CITRIX_INSTALLER_NAME}/install.img ${xen_installer_dir}
 ```
 
 Copy archlinux pxe files (used for the rescue image)
