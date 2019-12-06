@@ -10,6 +10,9 @@
 ##
 # Configuration
 
+# shellcheck source=../.env
+. "$(dirname "$0")/../.env"
+
 function usage {
 	echo "Usage: $0 <IP address or hostname> [ rescue | xenserver-auto | off ]"
 	exit 1
