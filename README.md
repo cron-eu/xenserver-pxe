@@ -75,10 +75,14 @@ cp configuration-sample/xen-setup/answerfile.xml $file
 sed -i "s/ROOT_PASSWORD/$(openssl rand -base64 32)/" $file 
 sed -i "s/SOURCE_URL/$URL" $file
 
-# Copy the PXE related files from the Installer bundle:
+Symlink PXE-boot files from the XenServer installer bundle:
 
+```bash
 mkdir -p /srv/tftp/pxelinux.cfg
-cp /var/www/html/${CITRIX_INSTALLER_NAME}/boot/pxelinux/* /srv/tftp/ 
+ln -s /var/www/html/${CITRIX_INSTALLER_NAME}/boot/pxelinux/pxelinux.0 /srv/tftp/pxelinux.0
+ln -s /var/www/html/${CITRIX_INSTALLER_NAME}/boot/pxelinux/menu.c32 /srv/tftp/menu.c32 
+ln -s /var/www/html/${CITRIX_INSTALLER_NAME}/boot/pxelinux/mboot.c32 /srv/tftp/mboot.c32 
+```
 
 # Copy the Xen Installer from bundle:
 
